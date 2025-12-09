@@ -106,3 +106,18 @@ fi
 if [[ $UID -eq 0 ]]; then
   PROMPT='$(prompt_info)'  # Skip venv for root user
 fi
+
+
+[ -f "/home/karan/.ghcup/env" ] && . "/home/karan/.ghcup/env" # ghcup-env
+
+export N8N_FEATURES_ENABLED=ai
+export EDITOR=nvim
+
+# FZF config
+export FZF_DEFAULT_COMMAND='fd --hidden --follow --exclude .git'
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+
+# fzf keybindings and completion
+source /usr/share/doc/fzf/examples/key-bindings.zsh
+source /usr/share/doc/fzf/examples/completion.zsh
+
