@@ -10,3 +10,8 @@ vim.opt.clipboard = "unnamedplus"
 
 -- Enable absolute line numbers
 vim.o.number = true
+
+-- Better line wrapping
+vim.opt.wrap = true -- Enable line wrap
+vim.opt.breakindent = true -- Maintain indent when wrapping
+vim.opt.linebreak = true -- Break lines at word boundaries not midword

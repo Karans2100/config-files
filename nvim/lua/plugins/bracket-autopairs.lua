@@ -93,16 +93,33 @@ return {
 
 			require("ibl").setup({
 				indent = {
-					highlight = highlight,
+					highlight = "IblIndent", -- Don't show indent lines everywhere
 					char = "┊", -- You can use: │, ┊, ┆, ¦, |, ▏
 				},
 				scope = {
 					enabled = true,
 					show_start = true,
 					show_end = true,
-					highlight = highlight,
+					highlight = highlight, -- Only show indent lines for current scope
 				},
 			})
+		end,
+	},
+
+	-- Plugin to highlight only current scope brackets
+	{
+		"utilyre/sentiment.nvim",
+		version = "*",
+		event = "VeryLazy",
+		opts = {
+			pairs = {
+				{ "(", ")" },
+				{ "{", "}" },
+				{ "[", "]" },
+			},
+		},
+		init = function()
+			vim.g.loaded_matchparen = 1
 		end,
 	},
 }

@@ -7,7 +7,7 @@ return {
 	config = function()
 		local null_ls = require("null-ls")
 
-		-- Configure diagnostics display FIRST
+		-- Configure diagnostics display
 		vim.diagnostic.config({
 			virtual_text = {
 				enabled = true,
@@ -34,52 +34,27 @@ return {
 		})
 
 		-- Setup null-ls
-		vim.diagnostic.config({
-			virtual_text = {
-				enabled = true,
-				source = "if_many", -- Show source if multiple sources
-				prefix = "●", -- Could be '■', '▎', 'x', '●', etc.
-			},
-			signs = true,
-			underline = true,
-			update_in_insert = false,
-			severity_sort = true,
-			float = {
-				border = "rounded",
-				source = "always", -- Show source in floating window
-				header = "",
-				prefix = "",
-			},
-		})
-
-		-- Define diagnostic signs
-		local signs = {
-			Error = " ",
-			Warn = " ",
-			Hint = " ",
-			Info = " ",
-		}
-
-		for type, icon in pairs(signs) do
-			local hl = "DiagnosticSign" .. type
-			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-		end
-
-		-- Formatters to add in Null LS
 		null_ls.setup({
 			sources = {
 				null_ls.builtins.formatting.stylua, -- Formatter for Lua
 				null_ls.builtins.formatting.prettier, -- Formatter for JS
 				require("none-ls.diagnostics.eslint"), -- Linter for JS
 				null_ls.builtins.formatting.black, -- Formatter for Python
-				null_ls.builtins.formatting.isort, -- Linter for Python
+				null_ls.builtins.formatting.isort, -- Formatter for Python
 				null_ls.builtins.formatting.google_java_format, -- Formatter for Java
 				null_ls.builtins.diagnostics.checkstyle, -- Linter for Java
 			},
 		})
 
+		-- Format on save
+		vim.api.nvim_create_autocmd("BufWritePre", {
+			callback = function()
+				vim.lsp.buf.format({ async = false })
+			end,
+		})
+
 		-- Keymaps for formatting
-		vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
+		vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, { desc = "Format file" })
 
 		-- Keymaps for diagnostics
 		vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Open diagnostic float" })
